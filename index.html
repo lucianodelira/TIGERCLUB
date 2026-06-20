@@ -578,5 +578,95 @@
   });
 </script>
 
+
+
+
+
+
+
+
+
+
+    <style>
+#superacertos-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.92);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999999;
+    padding:10px;
+}
+
+#superacertos-banner{
+    width:100%;
+    max-width:500px;
+    max-height:95vh;
+    object-fit:contain;
+    cursor:pointer;
+    animation:piscar .8s infinite;
+}
+
+@keyframes piscar{
+    0%{opacity:1;}
+    50%{opacity:.5;}
+    100%{opacity:1;}
+}
+</style>
+
+<div id="superacertos-overlay">
+    <img id="superacertos-banner" src="" alt="Super Acertos">
+</div>
+
+<script>
+(function(){
+
+    // Exibir apenas em celulares
+    if(window.innerWidth > 768){
+        return;
+    }
+
+    const banners = [
+        "1000589409.png",
+        "1000589410.png"
+    ];
+
+    const destino = "https://app.superacertos.club/pr/DiNatQPp";
+
+    let indice = 0;
+
+    function mostrarBanner(){
+
+        const overlay = document.getElementById("superacertos-overlay");
+        const banner = document.getElementById("superacertos-banner");
+
+        banner.src = banners[indice];
+
+        indice++;
+        if(indice >= banners.length){
+            indice = 0;
+        }
+
+        overlay.style.display = "flex";
+    }
+
+    document
+        .getElementById("superacertos-banner")
+        .addEventListener("click", function(){
+            window.location.href = destino;
+        });
+
+    // Primeira exibição após 10 segundos
+    setTimeout(mostrarBanner, 10000);
+
+    // Reexibe a cada 5 minutos
+    setInterval(mostrarBanner, 300000);
+
+})();
+</script>
 </body>
 </html>
