@@ -587,103 +587,153 @@
 
 
 
-    <style>
+<style>
 #superacertos-overlay{
     position:fixed;
     top:0;
     left:0;
     width:100vw;
     height:100vh;
-    background:rgba(0,0,0,.95);
+    background:rgba(0,0,0,.90);
     display:none;
     justify-content:center;
     align-items:center;
     z-index:99999999;
 }
 
-#superacertos-banner{
+#superacertos-box{
+    position:relative;
     width:95%;
     max-width:500px;
-    max-height:95vh;
+    text-align:center;
+}
+
+#superacertos-banner{
+    width:100%;
+    max-height:75vh;
     object-fit:contain;
     cursor:pointer;
-    animation:piscar 0.8s infinite;
+    border-radius:12px;
+    animation:piscar .8s infinite;
+}
+
+#superacertos-texto{
+    margin-top:15px;
+    color:#fff;
+    font-size:17px;
+    font-weight:bold;
+    line-height:1.5;
+}
+
+#superacertos-texto span{
+    color:#FFD700;
+}
+
+#superacertos-fechar{
+    position:absolute;
+    top:-15px;
+    right:-15px;
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:#ff0000;
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
 @keyframes piscar{
     0%{opacity:1;}
-    50%{opacity:.4;}
+    50%{opacity:.45;}
     100%{opacity:1;}
 }
 </style>
 
 <div id="superacertos-overlay">
-    <img id="superacertos-banner" src="" alt="Super Acertos">
+
+    <div id="superacertos-box">
+
+        <button id="superacertos-fechar">✕</button>
+
+        <img id="superacertos-banner" src="" alt="Tiger Club">
+
+        <div id="superacertos-texto">
+
+            <span>JÁ POSSUI SALDO NA TIGERS CLUB?</span>
+
+            <br><br>
+
+            Clique no banner acima para acessar sua conta e continuar jogando.
+
+        </div>
+
+    </div>
+
 </div>
 
 <script>
 (function(){
 
     // Apenas celular
-    if(window.innerWidth > 768){
+    if(window.innerWidth>768){
         return;
     }
 
-    const banners = [
+    // Chave baseada na data
+    const hoje=new Date().toISOString().slice(0,10);
+
+    // Se já viu hoje, não mostra
+    if(localStorage.getItem("bannerTigerDia")==hoje){
+        return;
+    }
+
+    const banners=[
         "1781963446720.png",
         "1781963515978.png"
     ];
 
-    const linkDestino =
-        "https://app.superacertos.club/pr/DiNatQPp";
+    const linkDestino="https://app.tigersclub.vip/pr/cmDAwXiS";
 
-    let bannerAtual = 0;
+    let bannerAtual=0;
 
-    function mostrarBanner(){
+    const overlay=document.getElementById("superacertos-overlay");
+    const banner=document.getElementById("superacertos-banner");
 
-        const overlay =
-            document.getElementById("superacertos-overlay");
+    banner.src=banners[0];
 
-        const banner =
-            document.getElementById("superacertos-banner");
+    overlay.style.display="flex";
 
-        banner.src = banners[bannerAtual];
-
-        bannerAtual++;
-
-        if(bannerAtual >= banners.length){
-            bannerAtual = 0;
-        }
-
-        overlay.style.display = "flex";
-    }
-
-    document
-        .getElementById("superacertos-banner")
-        .addEventListener("click", function(){
-
-            window.location.href = linkDestino;
-
-        });
-
-    // Exibe imediatamente
-    mostrarBanner();
-
-    // Troca o banner a cada 5 segundos (opcional)
+    // Alterna imagens
     setInterval(function(){
 
-        const banner =
-            document.getElementById("superacertos-banner");
-
-        banner.src = banners[bannerAtual];
-
         bannerAtual++;
 
-        if(bannerAtual >= banners.length){
-            bannerAtual = 0;
+        if(bannerAtual>=banners.length){
+            bannerAtual=0;
         }
 
-    }, 5000);
+        banner.src=banners[bannerAtual];
+
+    },5000);
+
+    // Clique no banner
+    banner.onclick=function(){
+
+        window.location.href=linkDestino;
+
+    };
+
+    // Fechar
+    document.getElementById("superacertos-fechar").onclick=function(){
+
+        overlay.style.display="none";
+
+        // Salva apenas a data de hoje
+        localStorage.setItem("bannerTigerDia",hoje);
+
+    };
 
 })();
 </script>
