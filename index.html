@@ -744,5 +744,124 @@
 
 })();
 </script>
+
+
+
+
+ <script>
+  (function () {
+    // --- SUPORTE ---
+    var sheet = document.getElementById('supportSheet');
+    var handle = document.getElementById('supportHandle');
+    var startY = null;
+
+    function setSupportOpen(open) {
+      sheet.classList.toggle('open', open);
+      handle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      sheet.setAttribute('aria-hidden', open ? 'false' : 'true');
+      var arrow = handle.querySelector('.arrow');
+      if (arrow) arrow.textContent = open ? '\u25BC' : '\u25B2';
+    }
+    function toggleSupport() {
+      setSupportOpen(!sheet.classList.contains('open'));
+    }
+    handle.addEventListener('click', toggleSupport);
+    handle.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSupport(); }
+      if (e.key === 'Escape') setSupportOpen(false);
+    });
+    handle.addEventListener('touchstart', function (e) {
+      if (e.touches && e.touches.length) startY = e.touches[0].clientY;
+    }, { passive: true });
+    handle.addEventListener('touchend', function (e) {
+      if (startY === null || !e.changedTouches || !e.changedTouches.length) return;
+      var d = e.changedTouches[0].clientY - startY;
+      if (d < -12) setSupportOpen(true);
+      else if (d > 12) setSupportOpen(false);
+      startY = null;
+    }, { passive: true });
+
+    // --- MENU BANCAS ---
+    var menu = document.getElementById('menu-hamburguer');
+    var botoes = document.getElementById('botoes-container');
+    function toggleMenu() {
+      var aberto = menu.classList.toggle('open');
+      botoes.classList.toggle('open', aberto);
+    }
+    menu.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleMenu();
+    });
+    menu.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMenu(); }
+    });
+
+    // Links das bancas
+    document.getElementById('botao-bola').addEventListener('click', function () {
+      window.location.href = 'https://www.brasileirao.site';
+    });
+    document.getElementById('botao-tigerclub').addEventListener('click', function () {
+      window.open('https://WWW.TIGERSCLUB.NET', '_blank');
+    });
+    document.getElementById('botao-feiticeira').addEventListener('click', function () {
+      window.open('https://www.feiticeiravip.com.br', '_blank');
+    });
+    document.getElementById('botao-acertos').addEventListener('click', function () {
+      window.open('https://app.acertos.online/pr/sbrqjugZ', '_blank');
+    });
+    document.getElementById('botao-brasil').addEventListener('click', function () {
+      window.open('https://www.bancabrasileira.net', '_blank');
+    });
+    document.getElementById('whatzap').addEventListener('click', function () {
+      window.open('https://www.salvadorloterias.com', '_blank');
+    });
+  })();
+  </script>
+
+  <script>
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.style.display = 'block';
+  });
+  function instalarApp() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        document.getElementById('install-banner').style.display = 'none';
+      });
+    }
+  }
+  </script>
+
+  <script>
+  window.addEventListener('load', function () {
+    const lastShown = localStorage.getItem('tigerBannerLastShown');
+    const now = new Date().getTime();
+    const oneDay = 24 * 60 * 60 * 1000;
+    if (!lastShown || now - lastShown > oneDay) {
+      setTimeout(() => {
+        document.getElementById('tiger-banner').style.display = 'block';
+        localStorage.setItem('tigerBannerLastShown', now.toString());
+      }, 5000);
+    }
+    document.getElementById('close-tiger-banner').onclick = function () {
+      document.getElementById('tiger-banner').style.display = 'none';
+    };
+  });
+  </script>
+
+  <script>
+  function fecharWhatsBanner() {
+    const banner = document.getElementById('whats-banner');
+    if (!banner) return;
+    banner.classList.add('whats-banner-fechando');
+    setTimeout(function () { banner.remove(); }, 250);
+  }
+  </script>
+    
 </body>
 </html>
